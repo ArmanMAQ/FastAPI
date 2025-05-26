@@ -68,4 +68,4 @@ jobs:
         with:
           app-name: 'TestFidelityFastAPIPOC'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2D1CB92FAF004A40B04EFA15DC6BE9F9 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_011ED9182A6F4AA2A05A7664BC3D601F }}
