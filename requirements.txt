@@ -21,7 +21,6 @@ pydantic
 pydantic_core
 PyJWT
 python-dotenv
-pythonnet
 requests
 sniffio
 starlette
