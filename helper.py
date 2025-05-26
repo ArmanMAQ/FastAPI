@@ -6,9 +6,9 @@ from queue import Queue
 from threading import Thread
 import openpyxl
 import uuid # For unique filenames
-import clr
+# import clr
 from fastapi.responses import JSONResponse
-clr.AddReference("Microsoft.AnalysisServices.AdomdClient")
+# clr.AddReference("Microsoft.AnalysisServices.AdomdClient")
 from pyadomd import Pyadomd
 
 
