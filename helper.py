@@ -1,5 +1,4 @@
 import clr
-clr.runtime = "coreclr"
 import os
 import csv
 import time
