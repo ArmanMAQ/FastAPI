@@ -79,6 +79,7 @@ def run_batch_query(conn_str: str, dax_query: str, batch_size=10000):
     This is useful for large datasets to avoid memory issues.
     The batch size can be adjusted based on the available memory.
     """
+    print(conn_str)
     with Pyadomd(conn_str) as conn:
         with conn.cursor().execute(dax_query) as cur:
             columns = [col[0] for col in cur.description]
