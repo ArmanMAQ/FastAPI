@@ -94,7 +94,7 @@ def write_batches_to_excel(conn_str: str, dax_query: str,filepath:str, batch_siz
     Consumes batches yielded by run_export_batch and writes them to an Excel file.
     """
     runtimes= []
-   
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
     start_time = time.time()
     wb = openpyxl.Workbook(write_only=True)  # Use write_only mode for performance
     ws = wb.create_sheet()
@@ -121,6 +121,7 @@ def write_batches_to_csv(conn_str: str, dax_query: str, filepath: str, batch_siz
     """
     Consumes batches yielded by run_export_batch and writes them to a CSV file.
     """
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
     with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:  # <-- Add encoding
         writer = csv.writer(csvfile)
         i = 1
