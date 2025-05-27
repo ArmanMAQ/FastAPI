@@ -44,12 +44,12 @@ export_lock = Lock()
 
 @app.get("/")
 def home():
-    return {"message": "Welcome to the migrated Python FastAPI!"}
+    return {"message": "Welcome to the migrated Python FastAPI3!"}
 @app.get("/api/Test")
 async def api_test():
     return JSONResponse(content={"message": "Test API is working!"})
 
-@app.get("/api/exportFile")
+@app.post("/api/exportFile")
 async def api_exportFile(
     exportFileType: str = Query(..., description="Type of export file"),
     exportFileName: str = Query(..., description="Base name of the export file"),
