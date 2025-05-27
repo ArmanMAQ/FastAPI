@@ -10,9 +10,9 @@ from pythonnet import load
 # Use coreclr instead of default (which becomes mono on Linux)
 load("coreclr")
 import uuid # For unique filenames
-# import clr
+import clr
 from fastapi.responses import JSONResponse
-# clr.AddReference("Microsoft.AnalysisServices.AdomdClient")
+clr.AddReference("Microsoft.AnalysisServices.AdomdClient")
 from pyadomd import Pyadomd
 
 
