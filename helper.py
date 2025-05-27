@@ -1,6 +1,5 @@
-from pythonnet import load
-# Use coreclr instead of default (which becomes mono on Linux)
-load("mono")
+import clr
+clr.runtime = "coreclr"
 import os
 import csv
 import time
@@ -10,7 +9,6 @@ from threading import Thread
 import openpyxl
 import clr_loader
 import uuid # For unique filenames
-import clr
 from fastapi.responses import JSONResponse
 clr.AddReference("Microsoft.AnalysisServices.AdomdClient")
 from pyadomd import Pyadomd
