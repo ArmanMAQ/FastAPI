@@ -1,6 +1,6 @@
 from pythonnet import load
 # Use coreclr instead of default (which becomes mono on Linux)
-load("coreclr")
+load("mono")
 import os
 import csv
 import time

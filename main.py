@@ -1,6 +1,3 @@
-from pythonnet import load
-# Use coreclr instead of default (which becomes mono on Linux)
-load("coreclr")
 import uvicorn
 from fastapi import FastAPI,Query, HTTPException, Request, Header
 from fastapi.middleware.cors import CORSMiddleware
