@@ -10,14 +10,14 @@ import io
 
 
 from helper import export_data_route
-from models.export_models import ExportReportConfiguration, ExportFile
-from repositories.export_repository import ExportRepository
-from common.token_manager import get_power_bi_client_from_token
-from api.v1.endpoints.export import router as export_router
+# from models.export_models import ExportReportConfiguration, ExportFile
+# from repositories.export_repository import ExportRepository
+# from common.token_manager import get_power_bi_client_from_token
+# from api.v1.endpoints.export import router as export_router
 
 
 app = FastAPI()
-repo = ExportRepository()
+# repo = ExportRepository()
 
 # Enable CORS for all origins
 app.add_middleware(
@@ -40,7 +40,7 @@ export_jobs = {}
 export_files = {}
 export_lock = Lock()
 
-app.include_router(export_router, prefix="/api/v1")
+# app.include_router(export_router, prefix="/api/v1")
 
 @app.get("/")
 def home():
@@ -50,7 +50,7 @@ async def api_test(request: Request):
     return JSONResponse(content={"message": "Test API is working!"})
 
 @app.post("/api/exportFile")
-async def api_exportFile(request: ExportFile):
+async def api_exportFile(request: any):
     # Simulate user info (from the request,user context, etc.)
 
     exportFileType = request.exportFileType
@@ -84,8 +84,6 @@ async def api_exportFile(request: ExportFile):
         "exportFileType": exportFileType,
         "exportFileName": exportFileName
     }
-    
-
     return JSONResponse(content={"job_id": job_id, "message": message, "execution_time": execution_time, "file_path": file_path})
 
 # @app.get("/api/status/{job_id}")
