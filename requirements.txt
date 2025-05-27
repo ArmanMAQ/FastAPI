@@ -1,6 +1,7 @@
 fastapi[standard]
 uvicorn
 gunicorn
+clr_loader
 requests
 python-dotenv
 openpyxl
