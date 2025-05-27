@@ -46,11 +46,11 @@ export_lock = Lock()
 def home():
     return {"message": "Welcome to the migrated Python FastAPI!"}
 @app.post("/api/Test")
-async def api_test(request: Request):
+async def api_test(request):
     return JSONResponse(content={"message": "Test API is working!"})
 
 @app.post("/api/exportFile")
-async def api_exportFile(request: any):
+async def api_exportFile(request):
     # Simulate user info (from the request,user context, etc.)
 
     exportFileType = request.exportFileType
