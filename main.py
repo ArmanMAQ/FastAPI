@@ -51,14 +51,12 @@ async def api_test():
 
 @app.post("/api/exportFile")
 async def api_exportFile(
-    exportFileType: str = Query(..., description="Type of export file"),
-    exportFileName: str = Query(..., description="Base name of the export file"),
-    conn_str: str = Query(..., description="Connection string to the data source")
+request
 ):
     req = {
-        "file_type": exportFileType,
-        "conn_str": conn_str,
-        "filename_base": exportFileName,
+        "file_type": request.exportFileType,
+        "conn_str": request.conn_str,
+        "filename_base": request.exportFileName,
     }
     res = export_data_route(req)
 
@@ -69,8 +67,8 @@ async def api_exportFile(
     job_id = str(uuid.uuid4())
     export_jobs[job_id] = {
         "status": "in_progress",
-        "exportFileType": exportFileType,
-        "exportFileName": exportFileName
+        "exportFileType": request.exportFileType,
+        "exportFileName": request.exportFileName
     }
 
     return JSONResponse(content={
