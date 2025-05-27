@@ -1,3 +1,6 @@
+from pythonnet import load
+# Use coreclr instead of default (which becomes mono on Linux)
+load("coreclr")
 import os
 import csv
 import time
@@ -6,9 +9,6 @@ from queue import Queue
 from threading import Thread
 import openpyxl
 import clr_loader
-from pythonnet import load
-# Use coreclr instead of default (which becomes mono on Linux)
-load("coreclr")
 import uuid # For unique filenames
 import clr
 from fastapi.responses import JSONResponse

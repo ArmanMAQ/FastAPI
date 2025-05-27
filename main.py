@@ -1,5 +1,8 @@
+from pythonnet import load
+# Use coreclr instead of default (which becomes mono on Linux)
+load("coreclr")
 import uvicorn
-from fastapi import FastAPI, HTTPException, Request, Header
+from fastapi import FastAPI,Query, HTTPException, Request, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 import json
@@ -50,41 +53,35 @@ async def api_test():
     return JSONResponse(content={"message": "Test API is working!"})
 
 @app.get("/api/exportFile")
-async def api_exportFile(request):
-    # Simulate user info (from the request,user context, etc.)
-
-    exportFileType = request.exportFileType
-    exportFileName = request.exportFileName
-    if not exportFileType or not exportFileName:
-        raise HTTPException(status_code=400, detail="Missing export file type or name")
-    # Simulate job creation
-    # run "export_data_route" here passing the request parameters of data
-    
-    conn_str = request.conn_str
-    if not conn_str:
-        raise HTTPException(status_code=400, detail="Missing connection string")
+async def api_exportFile(
+    exportFileType: str = Query(..., description="Type of export file"),
+    exportFileName: str = Query(..., description="Base name of the export file"),
+    conn_str: str = Query(..., description="Connection string to the data source")
+):
     req = {
         "file_type": exportFileType,
         "conn_str": conn_str,
         "filename_base": exportFileName,
     }
     res = export_data_route(req)
-    # get message from the response
-    message = res["message"] if "message" in res else "Export job started"
-    execution_time = res["execution_time"] if "execution_time" in res else None
-    file_path = res["filepath"] if "filepath" in res else None
+
+    message = res.get("message", "Export job started")
+    execution_time = str(res.get("execution_time", "Unknown")) + " seconds"
+    file_path = res.get("filepath")
+
     job_id = str(uuid.uuid4())
-    # convert execution time to string
-    if execution_time:
-        execution_time = str(execution_time) + " seconds"
-    else:
-        execution_time = "Unknown"
     export_jobs[job_id] = {
         "status": "in_progress",
         "exportFileType": exportFileType,
         "exportFileName": exportFileName
     }
-    return JSONResponse(content={"job_id": job_id, "message": message, "execution_time": execution_time, "file_path": file_path})
+
+    return JSONResponse(content={
+        "job_id": job_id,
+        "message": message,
+        "execution_time": execution_time,
+        "file_path": file_path
+    })
 
 # @app.get("/api/status/{job_id}")
 # def api_status(job_id: str):
