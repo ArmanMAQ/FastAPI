@@ -44,7 +44,7 @@ export_lock = Lock()
 
 @app.get("/")
 def home():
-    return {"message": "Welcome to the migrated Python FastAPI3!"}
+    return {"message": "Welcome to the migrated Python FastAPI2!"}
 @app.get("/api/Test")
 async def api_test():
     return JSONResponse(content={"message": "Test API is working!"})
