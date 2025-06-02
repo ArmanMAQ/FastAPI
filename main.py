@@ -1,7 +1,8 @@
 import uvicorn
-from fastapi import FastAPI,Query, HTTPException, Request, Header
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 import json
 import os
 import uuid
@@ -14,6 +15,14 @@ from helper import export_data_route
 # from repositories.export_repository import ExportRepository
 # from common.token_manager import get_power_bi_client_from_token
 # from api.v1.endpoints.export import router as export_router
+
+
+# Define the request body model
+class ExportRequestBody(BaseModel):
+    exportFileType: str
+    exportFileName: str
+    conn_str: str
+    report_subscription: dict | None = None # Made optional, adjust if always required
 
 
 app = FastAPI()
@@ -49,46 +58,17 @@ def home():
 async def api_test():
     return JSONResponse(content={"message": "Test API is working!"})
 
-# @app.post("/api/exportFile")
-# async def api_exportFile(
-#     exportFileType,
-#     exportFileName,
-#     conn_str
-# ):
-#     req = {
-#         "file_type": exportFileType,
-#         "conn_str": conn_str,
-#         "filename_base": exportFileName,
-#     }
-#     res = export_data_route(req)
+@app.put("/api/exportFile")
+async def export_data(payload: ExportRequestBody):
+    # Access data from the Pydantic model
+    exportFileType = payload.exportFileType
+    exportFileName = payload.exportFileName
+    conn_str = payload.conn_str
+    report_subscription = payload.report_subscription
 
-#     message = res.get("message", "Export job started")
-#     execution_time = str(res.get("execution_time", "Unknown")) + " seconds"
-#     file_path = res.get("filepath")
-
-#     job_id = str(uuid.uuid4())
-#     export_jobs[job_id] = {
-#         "status": "in_progress",
-#         "exportFileType": exportFileType,
-#         "exportFileName": exportFileName
-#     }
-
-#     return JSONResponse(content={
-#         "job_id": job_id,
-#         "message": message,
-#         "execution_time": execution_time,
-#         "file_path": file_path
-#     })
-
-@app.post("/api/exportFile")
-async def export_data(request, background_tasks):
-    exportFileType = request.exportFileType
-    exportFileName = request.exportFileName
     if not exportFileType or not exportFileName:
         raise HTTPException(status_code=400, detail="Missing export file type or name")
-    # Simulate job creation
-    # run "export_data_route" here passing the request parameters of data
-    conn_str = request.conn_str
+    
     if not conn_str:
         raise HTTPException(status_code=400, detail="Missing connection string")
    
@@ -98,12 +78,17 @@ async def export_data(request, background_tasks):
         "file_type": exportFileType,
         "conn_str": conn_str,
         "filename_base": exportFileName,
-        "report_subscription": request.report_subscription,
+        "report_subscription": report_subscription, # Use the value from the payload
     }
  
     # Call repository method to export data
-    export_data_route(req)
-    return JSONResponse(content={"job_id": job_id, "status": "In progress", "message": "Export job started"})
+    # Assuming export_data_route is synchronous. If it's async, 'await' it.
+    # If it's long-running and should be in the background, you'd use BackgroundTasks.
+    response_data = export_data_route(req)
+    
+    # You might want to return more details from export_data_route
+    # For now, keeping the original response structure
+    return JSONResponse(content={"job_id": job_id, "status": "In progress", "message": "Export job started", "details": response_data})
 
 # @app.get("/api/status/{job_id}")
 # def api_status(job_id: str):
