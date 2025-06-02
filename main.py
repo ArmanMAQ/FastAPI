@@ -58,9 +58,10 @@ def home():
 async def api_test():
     return JSONResponse(content={"message": "Test API is working!"})
 
-@app.put("/api/exportFile")
+@app.post("/api/exportFile")
 async def export_data(payload: ExportRequestBody):
     # Access data from the Pydantic model
+    print("Received payload:", payload)
     exportFileType = payload.exportFileType
     exportFileName = payload.exportFileName
     conn_str = payload.conn_str

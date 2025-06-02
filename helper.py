@@ -58,7 +58,7 @@ def export_data_route(data):
     if not conn_str:
         return JSONResponse(content={"error": "Connection string is required"}, status_code=400)
     dax_query = query #!Change as per your requirement / data.get('dax_query')
-
+    print(f"DAX query: {dax_query}")
     file_type = data.get('file_type')
     print(f"File type requested: {file_type}")
 
