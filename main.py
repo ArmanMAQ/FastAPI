@@ -80,6 +80,7 @@ async def api_test():
 #         "file_path": file_path
 #     })
 
+@app.post("/api/exportFile")
 async def export_data(request, background_tasks):
     exportFileType = request.exportFileType
     exportFileName = request.exportFileName
