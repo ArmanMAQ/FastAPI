@@ -49,36 +49,60 @@ def home():
 async def api_test():
     return JSONResponse(content={"message": "Test API is working!"})
 
-@app.post("/api/exportFile")
-async def api_exportFile(
-    exportFileType,
-    exportFileName,
-    conn_str
-):
+# @app.post("/api/exportFile")
+# async def api_exportFile(
+#     exportFileType,
+#     exportFileName,
+#     conn_str
+# ):
+#     req = {
+#         "file_type": exportFileType,
+#         "conn_str": conn_str,
+#         "filename_base": exportFileName,
+#     }
+#     res = export_data_route(req)
+
+#     message = res.get("message", "Export job started")
+#     execution_time = str(res.get("execution_time", "Unknown")) + " seconds"
+#     file_path = res.get("filepath")
+
+#     job_id = str(uuid.uuid4())
+#     export_jobs[job_id] = {
+#         "status": "in_progress",
+#         "exportFileType": exportFileType,
+#         "exportFileName": exportFileName
+#     }
+
+#     return JSONResponse(content={
+#         "job_id": job_id,
+#         "message": message,
+#         "execution_time": execution_time,
+#         "file_path": file_path
+#     })
+
+async def export_data(request, background_tasks):
+    exportFileType = request.exportFileType
+    exportFileName = request.exportFileName
+    if not exportFileType or not exportFileName:
+        raise HTTPException(status_code=400, detail="Missing export file type or name")
+    # Simulate job creation
+    # run "export_data_route" here passing the request parameters of data
+    conn_str = request.conn_str
+    if not conn_str:
+        raise HTTPException(status_code=400, detail="Missing connection string")
+   
+    job_id = str(uuid.uuid4())
     req = {
+        "job_id": job_id,
         "file_type": exportFileType,
         "conn_str": conn_str,
         "filename_base": exportFileName,
+        "report_subscription": request.report_subscription,
     }
-    res = export_data_route(req)
-
-    message = res.get("message", "Export job started")
-    execution_time = str(res.get("execution_time", "Unknown")) + " seconds"
-    file_path = res.get("filepath")
-
-    job_id = str(uuid.uuid4())
-    export_jobs[job_id] = {
-        "status": "in_progress",
-        "exportFileType": exportFileType,
-        "exportFileName": exportFileName
-    }
-
-    return JSONResponse(content={
-        "job_id": job_id,
-        "message": message,
-        "execution_time": execution_time,
-        "file_path": file_path
-    })
+ 
+    # Call repository method to export data
+    export_data_route(req)
+    return JSONResponse(content={"job_id": job_id, "status": "In progress", "message": "Export job started"})
 
 # @app.get("/api/status/{job_id}")
 # def api_status(job_id: str):
